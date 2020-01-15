@@ -8,3 +8,4 @@ log/*.log
 *.out
 *.swp
 .vscode/
+logs/

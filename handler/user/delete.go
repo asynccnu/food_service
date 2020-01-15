@@ -3,9 +3,9 @@ package user
 import (
 	"strconv"
 
-	. "github.com/muxih4ck/Go-Web-Application-Template/handler"
-	"github.com/muxih4ck/Go-Web-Application-Template/model"
-	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
+	. "github.com/asynccnu/food_service/handler"
+	"github.com/asynccnu/food_service/model"
+	"github.com/asynccnu/food_service/pkg/errno"
 
 	"github.com/gin-gonic/gin"
 )

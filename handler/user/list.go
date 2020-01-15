@@ -1,9 +1,9 @@
 package user
 
 import (
-	. "github.com/muxih4ck/Go-Web-Application-Template/handler"
-	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
-	"github.com/muxih4ck/Go-Web-Application-Template/service"
+	. "github.com/asynccnu/food_service/handler"
+	"github.com/asynccnu/food_service/pkg/errno"
+	"github.com/asynccnu/food_service/service"
 
 	"github.com/gin-gonic/gin"
 )

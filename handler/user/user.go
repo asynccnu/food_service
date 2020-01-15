@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/muxih4ck/Go-Web-Application-Template/model"
+	"github.com/asynccnu/food_service/model"
 )
 
 type CreateRequest struct {

@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/config"
-	"github.com/muxih4ck/Go-Web-Application-Template/log"
-	"github.com/muxih4ck/Go-Web-Application-Template/model"
-	"github.com/muxih4ck/Go-Web-Application-Template/router"
-	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
+	"github.com/asynccnu/food_service/config"
+	"github.com/asynccnu/food_service/log"
+	"github.com/asynccnu/food_service/model"
+	"github.com/asynccnu/food_service/router"
+	"github.com/asynccnu/food_service/router/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
@@ -22,6 +22,22 @@ import (
 var (
 	cfg = pflag.StringP("config", "c", "", "apiserver config file path.")
 )
+
+// @title food_service
+// @version 1.0
+// @description 美食服务
+
+// @host ....
+// @BasePath /api/v1
+
+// @Schemas http
+
+// @tag.name restaurant
+// @tag.description 店铺(窗口)相关
+// @tag.name food
+// @tag.description 菜品相关
+// @tag.name search
+// @tag.description 搜索相关
 
 func main() {
 	pflag.Parse()

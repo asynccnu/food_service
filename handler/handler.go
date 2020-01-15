@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"github.com/muxih4ck/Go-Web-Application-Template/log"
-	"github.com/muxih4ck/Go-Web-Application-Template/util"
+	"github.com/asynccnu/food_service/log"
+	"github.com/asynccnu/food_service/util"
 	"net/http"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
+	"github.com/asynccnu/food_service/pkg/errno"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

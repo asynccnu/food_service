@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/model"
-	"github.com/muxih4ck/Go-Web-Application-Template/util"
+	"github.com/asynccnu/food_service/model"
+	"github.com/asynccnu/food_service/util"
 )
 
 func ListUser(username string, offset, limit int) ([]*model.UserInfo, uint64, error) {

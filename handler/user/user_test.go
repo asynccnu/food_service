@@ -2,10 +2,10 @@ package user
 
 import (
 	"encoding/json"
-	"github.com/muxih4ck/Go-Web-Application-Template/config"
-	"github.com/muxih4ck/Go-Web-Application-Template/model"
-	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
-	"github.com/muxih4ck/Go-Web-Application-Template/util"
+	"github.com/asynccnu/food_service/config"
+	"github.com/asynccnu/food_service/model"
+	"github.com/asynccnu/food_service/router/middleware"
+	"github.com/asynccnu/food_service/util"
 	"net/http"
 	"os"
 	"strconv"

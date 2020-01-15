@@ -1,0 +1,27 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "美食服务",
+        "title": "food_service",
+        "contact": {},
+        "license": {},
+        "version": "1.0"
+    },
+    "host": "....",
+    "basePath": "/api/v1",
+    "paths": {},
+    "tags": [
+        {
+            "description": "店铺(窗口)相关",
+            "name": "restaurant"
+        },
+        {
+            "description": "菜品相关",
+            "name": "food"
+        },
+        {
+            "description": "搜索相关",
+            "name": "search"
+        }
+    ]
+}

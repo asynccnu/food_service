@@ -1,0 +1,17 @@
+basePath: /api/v1
+host: '....'
+info:
+  contact: {}
+  description: 美食服务
+  license: {}
+  title: food_service
+  version: "1.0"
+paths: {}
+swagger: "2.0"
+tags:
+- description: 店铺(窗口)相关
+  name: restaurant
+- description: 菜品相关
+  name: food
+- description: 搜索相关
+  name: search

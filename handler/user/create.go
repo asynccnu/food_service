@@ -1,11 +1,11 @@
 package user
 
 import (
-	. "github.com/muxih4ck/Go-Web-Application-Template/handler"
-	"github.com/muxih4ck/Go-Web-Application-Template/log"
-	"github.com/muxih4ck/Go-Web-Application-Template/model"
-	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
-	"github.com/muxih4ck/Go-Web-Application-Template/util"
+	. "github.com/asynccnu/food_service/handler"
+	"github.com/asynccnu/food_service/log"
+	"github.com/asynccnu/food_service/model"
+	"github.com/asynccnu/food_service/pkg/errno"
+	"github.com/asynccnu/food_service/util"
 	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 
-	"github.com/muxih4ck/Go-Web-Application-Template/log"
+	"github.com/asynccnu/food_service/log"
 	"github.com/spf13/viper"
 
 	// MySQL driver.
