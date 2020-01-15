@@ -21,4 +21,25 @@
 
 搜索历史
 
-模糊搜索 (美食名称，店家名称，不一定区分两名字)
+模糊搜索 (美食名称，店家名称，区分两名字)
+
+restaurant
+```sql
+id          int
+picture url string
+name        string
+location    string
+sales_volumn int
+introduction string
+```
+
+food
+```sql
+id          int
+picture url string
+name        string
+location    string #不一定存
+ingredients string
+price       string
+introduction string
+```
