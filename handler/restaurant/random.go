@@ -16,7 +16,7 @@ type RandomRestaurant struct {
 }
 
 type RandomRequest struct {
-	RestaurantName []string `json:"restaurant_name"`
+	RestaurantName *[]string `json:"restaurant_name"`
 }
 
 //@Tags restaurant
@@ -24,8 +24,9 @@ type RandomRequest struct {
 //@Description 美食首页的推荐窗口
 //@Accept json
 //@Produce json
-//@Param payload body RandomRequest true "食堂名字"
+//@Param payload body string true "食堂名字"
 //@Success 200 {object} RandomRestaurant
-//@Router /restaurant/list [get]
+//@Router /restaurant/random [get]
 func Random(c *gin.Context) {
+
 }

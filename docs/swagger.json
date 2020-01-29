@@ -116,7 +116,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/Request"
+                            "$ref": "#/definitions/model.Canteen"
                         }
                     }
                 ],
@@ -125,6 +125,40 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/restaurant.ResaurantList"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/random": {
+            "get": {
+                "description": "美食首页的推荐窗口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "restaurant"
+                ],
+                "summary": "美食首页",
+                "parameters": [
+                    {
+                        "description": "食堂名字",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/restaurant.RandomRestaurant"
                         }
                     }
                 }
@@ -227,6 +261,17 @@
                     "items": {
                         "$ref": "#/definitions/food.FoodDetails"
                     }
+                }
+            }
+        },
+        "model.Canteen": {
+            "type": "object",
+            "properties": {
+                "canteen_name": {
+                    "type": "string"
+                },
+                "storey": {
+                    "type": "integer"
                 }
             }
         },

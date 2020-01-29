@@ -17,6 +17,8 @@ import (
 	"github.com/spf13/viper"
 
 	"go.uber.org/zap"
+
+	"github.com/asynccnu/food_service/docs"
 )
 
 var (
@@ -43,6 +45,9 @@ var (
 
 func main() {
 	pflag.Parse()
+
+	//swag
+	docs.SwaggerInfo.BasePath = "/api/v1"
 
 	// init config
 	if err := config.Init(*cfg); err != nil {
