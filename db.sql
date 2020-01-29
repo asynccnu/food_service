@@ -12,11 +12,11 @@ CREATE TABLE `restaurant` (
   `name` varchar(255) NOT NULL DEFAULT 'restaurant',
   `location` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT "餐厅地点，用一个字节来标识.",
   `introduction` varchar(255),
-  `sales_volumn` int UNSIGNED COMMENT "月销量",
+  `average_price` int UNSIGNED COMMENT "平均价格",
   -- 不知道要不要
-  `createdAt` timestamp NULL DEFAULT NULL,
-  `updatedAt` timestamp NULL DEFAULT NULL,
-  `deletedAt` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
   KEY `location` (`location`)
@@ -32,9 +32,9 @@ CREATE TABLE `food` (
   `ingredient` varchar(255) COMMENT "原料， 食材",
   `price` float,
   -- 不知道要不要
-  `createdAt` timestamp NULL DEFAULT NULL,
-  `updatedAt` timestamp NULL DEFAULT NULL,
-  `deletedAt` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
   KEY `restaurant_id` (`restaurant_id`)

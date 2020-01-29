@@ -38,6 +38,8 @@ var (
 // @tag.description 菜品相关
 // @tag.name search
 // @tag.description 搜索相关
+// @tag.name canteen
+// @tag.description 食堂相关
 
 func main() {
 	pflag.Parse()

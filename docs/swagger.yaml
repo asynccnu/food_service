@@ -1,4 +1,122 @@
 basePath: /api/v1
+definitions:
+  food.FoodDetails:
+    properties:
+      canteen_name:
+        type: string
+      ingredient:
+        type: string
+      introduction:
+        type: string
+      name:
+        type: string
+      resaurant_name:
+        type: string
+      storey:
+        type: integer
+    type: object
+  food.FoodList:
+    properties:
+      food_list:
+        items:
+          $ref: '#/definitions/food.FoodDetails'
+        type: array
+    type: object
+  restaurant.Menu:
+    properties:
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  restaurant.RandomRestaurant:
+    properties:
+      average_price:
+        type: number
+      canteen_name:
+        type: string
+      picture_url:
+        type: string
+      recommendation:
+        type: string
+      restaurant_name:
+        type: string
+      storey:
+        type: integer
+    type: object
+  restaurant.ResaurantList:
+    properties:
+      restaurant_for_canteen:
+        items:
+          $ref: '#/definitions/restaurant.RestaurantForCanteen'
+        type: array
+    type: object
+  restaurant.RestaurantDetails:
+    properties:
+      average_price:
+        type: string
+      introduction:
+        type: string
+      menus:
+        items:
+          $ref: '#/definitions/restaurant.Menu'
+        type: array
+      name:
+        type: string
+      picture_url:
+        type: string
+    type: object
+  restaurant.RestaurantForCanteen:
+    properties:
+      average_price:
+        type: string
+      picture_url:
+        type: string
+      restaurant_id:
+        type: string
+      restaurant_name:
+        type: string
+    type: object
+  search.SearchFoodList:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/search.SearchFoodModel'
+        type: array
+    type: object
+  search.SearchFoodModel:
+    properties:
+      canteen_name:
+        type: string
+      name:
+        type: string
+      picture_url:
+        type: string
+      restaurant_name:
+        type: string
+      storey:
+        type: integer
+    type: object
+  search.SearchRestaurantList:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/search.SearchRestaurantModel'
+        type: array
+    type: object
+  search.SearchRestaurantModel:
+    properties:
+      canteen_name:
+        type: string
+      name:
+        type: string
+      picture_url:
+        type: string
+      restaurant_id:
+        type: integer
+      storey:
+        type: integer
+    type: object
 host: '....'
 info:
   contact: {}
@@ -6,7 +124,129 @@ info:
   license: {}
   title: food_service
   version: "1.0"
-paths: {}
+paths:
+  /food/recommend:
+    get:
+      consumes:
+      - application/json
+      description: 返回一些推荐的food
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每页最大数
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/food.FoodList'
+      summary: 华师必吃
+      tags:
+      - food
+  /restaurant/detail/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 给店家id，返回店家详情页
+      parameters:
+      - description: 店家的id，别的api会给出。
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant.RestaurantDetails'
+      summary: 店家详情页
+      tags:
+      - restaurant
+  /restaurant/list:
+    get:
+      consumes:
+      - application/json
+      description: 返回一些推荐的食堂
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每页最大数
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: 食堂信息，哪个食堂，楼层
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/Request'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant.ResaurantList'
+      summary: 在线菜单
+      tags:
+      - restaurant
+  /search/food:
+    get:
+      consumes:
+      - application/json
+      description: 搜索返回一个list
+      parameters:
+      - description: 搜索信息
+        in: query
+        name: search_text
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/search.SearchFoodList'
+      summary: 搜索食物
+      tags:
+      - search
+  /search/restaurant:
+    get:
+      consumes:
+      - application/json
+      description: 搜索返回一个list
+      parameters:
+      - description: 搜索信息
+        in: query
+        name: search_text
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/search.SearchRestaurantList'
+      summary: 搜索餐厅
+      tags:
+      - search
 swagger: "2.0"
 tags:
 - description: 店铺(窗口)相关
@@ -15,3 +255,5 @@ tags:
   name: food
 - description: 搜索相关
   name: search
+- description: 食堂相关
+  name: canteen

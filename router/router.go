@@ -3,10 +3,14 @@ package router
 import (
 	"net/http"
 
+	"github.com/asynccnu/food_service/handler/food"
+	"github.com/asynccnu/food_service/handler/restaurant"
 	"github.com/asynccnu/food_service/handler/sd"
+	"github.com/asynccnu/food_service/handler/search"
 	"github.com/asynccnu/food_service/router/middleware"
-
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // Load loads the middlewares, routes, handlers.
@@ -22,6 +26,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
 
+	url := ginSwagger.URL("http://127.0.0.1:8080/swagger/doc.json") // The url pointing to API definition
+	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
 	// The health check handlers
 	svcd := g.Group("/sd")
 	{
@@ -29,6 +36,24 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/disk", sd.DiskCheck)
 		svcd.GET("/cpu", sd.CPUCheck)
 		svcd.GET("/ram", sd.RAMCheck)
+	}
+
+	sear := g.Group("/api/v1/search")
+	{
+		sear.GET("/food", search.SearchFood)
+		sear.GET("/restaurant", search.SearchRestaurant)
+	}
+
+	rest := g.Group("/api/v1/restaurant")
+	{
+		rest.GET("/detail/:id", restaurant.Get)
+		rest.GET("/list", restaurant.List)
+		rest.GET("/random", restaurant.Random)
+	}
+
+	foo := g.Group("/api/v1/food")
+	{
+		foo.GET("/recommend", food.Recommend)
 	}
 
 	return g

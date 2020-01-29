@@ -33,7 +33,7 @@ func Logging() gin.HandlerFunc {
 		start := time.Now().UTC()
 		path := c.Request.URL.Path
 
-		reg := regexp.MustCompile("(/v1/user|/login)")
+		reg := regexp.MustCompile("(/v1/user|/login|/swagger)")
 		if !reg.MatchString(path) {
 			return
 		}
