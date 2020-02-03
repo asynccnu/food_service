@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/asynccnu/food_service/util"
@@ -96,18 +97,18 @@ func getCanteen(id uint8) *Canteen {
 // GetRestaurantByID 通过窗口ID获得 食堂model
 func GetRestaurantByID(id uint32) (*RestaurantModel, error) {
 	var Restaurant RestaurantModel
-	err := DB.Self.Where("id = ?", id).Find(&Restaurant).Error
-	if err != nil {
-		return nil, err
+	d := DB.Self.Where("id = ?", id).Find(&Restaurant)
+	if d.Error != nil {
+		return nil, d.Error
 	}
-	return &Restaurant, err
+	return &Restaurant, d.Error
 }
 
 //GetMenusByRestaurantID 通过窗口ID获得 食堂窗口的菜单，菜单信息有名字，价格。
 func GetMenusByRestaurantID(id uint32) (*[]Menu, error) {
 	var Menus []Menu
 	var foods []FoodModel
-	d := DB.Self.Table("food").Select("name", "price").Where("restaurant_id = ?", id).Find(&foods)
+	d := DB.Self.Raw("select name, price from food where restaurant_id = ?", id).Scan(&foods)
 	if d.Error != nil {
 		return nil, d.Error
 	}
@@ -128,10 +129,20 @@ type SearchFoodModel struct {
 
 // SearchForFoods 分词之后关键字用于数据库查询
 func SearchForFoods(st string, page, limit uint64) (*[]SearchFoodModel, error) {
-	kws := util.SegWord(st)
-	sql := "select restaurant_id, name, picture_url from food where name like " + kws
+	var kws string
+	if len([]rune(st)) > 1 {
+		//分词
+		kws = util.SegWord(st)
+		if kws == "" {
+			err := fmt.Errorf("搜索词语过于简单")
+			return nil, err
+		}
+	} else {
+		kws = "'%" + st + "%'"
+	}
+	sql := "select restaurant_id, name, picture_url from food where name like " + kws + " limit " + strconv.Itoa(int((page-1)*limit)) + ", " + strconv.Itoa(int(limit))
 	var foods []FoodModel
-	d := DB.Self.Exec(sql).Limit(limit).Offset((page - 1) * limit).Find(&foods)
+	d := DB.Self.Raw(sql).Scan(&foods)
 	if d.Error != nil {
 		return nil, d.Error
 	}
@@ -158,17 +169,21 @@ type SearchRestaurantModel struct {
 	PictureURL   string `json:"picture_url"`
 }
 
-// TODO FIX sql没有问题但是执行结果不对
 // SearchForRestaurants 分词之后关键字用于数据库查询
 func SearchForRestaurants(st string, page, limit uint64) (*[]SearchRestaurantModel, error) {
-	kws := util.SegWord(st)
-	if kws == "" {
-		err := fmt.Errorf("搜索词语过于简单")
-		return nil, err
+	var kws string
+	if len([]rune(st)) > 1 {
+		kws = util.SegWord(st)
+		if kws == "" {
+			err := fmt.Errorf("搜索词语过于简单")
+			return nil, err
+		}
+	} else {
+		kws = "'%" + st + "%'"
 	}
-	sql := "select id, name, picture_url from restaurant where name like " + kws
+	sql := "select id, name, picture_url, location from restaurant where name like " + kws + " limit " + strconv.Itoa(int((page-1)*limit)) + ", " + strconv.Itoa(int(limit))
 	var restaurants []RestaurantModel
-	d := DB.Self.Exec(sql).Limit(limit).Offset((page - 1) * limit).Find(&restaurants)
+	d := DB.Self.Raw(sql).Scan(&restaurants)
 	if d.Error != nil {
 		return nil, d.Error
 	}
