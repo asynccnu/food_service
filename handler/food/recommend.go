@@ -13,6 +13,7 @@ type FoodDetails struct {
 
 	Ingredient   string `json:"ingredient"`
 	Introduction string `json:"introduction"`
+	PictureURL   string `json:"picture_url"`
 }
 
 type FoodList struct {

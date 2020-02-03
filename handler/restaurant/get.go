@@ -1,28 +1,37 @@
 package restaurant
 
-import "github.com/gin-gonic/gin"
+import (
+	"strconv"
 
-type Menu struct {
-	Name  string  `json:"name"`
-	Price float64 `json:"price"`
-}
+	"github.com/asynccnu/food_service/handler"
+	"github.com/asynccnu/food_service/pkg/errno"
+	"github.com/asynccnu/food_service/service"
+	"github.com/gin-gonic/gin"
+)
 
-type RestaurantDetails struct {
-	Name         string  `json:"name"`
-	Introduction string  `json:"introduction"`
-	AveragePrice string  `json:"average_price"`
-	PictureURL   string  `json:"picture_url"`
-	Menus        *[]Menu `json:"menus"`
-}
-
+//Get router
 //@Tags restaurant
 //@Summary 店家详情页
 //@Description 给店家id，返回店家详情页
 //@Accept json
 //@Produce json
 //@Param id path int true "店家的id，别的api会给出。"
-//@Success 200 {object} RestaurantDetails
+//@Success 200 {object} model.RestaurantDetails
 //@Router /restaurant/detail/{id} [get]
 func Get(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 64)
+	if err != nil {
+		handler.SendBadRequest(c, errno.ErrGetParam, nil, err.Error())
+		return
+	}
 
+	//RD为窗口详细信息
+	RestaurantDetails, err := service.GetRestaurantDetailsByID(uint32(id))
+	if err != nil {
+		handler.SendBadRequest(c, errno.ErrCRUD, nil, err.Error())
+		return
+	}
+
+	handler.SendResponse(c, nil, *RestaurantDetails)
 }
