@@ -1,18 +1,12 @@
 package restaurant
 
 import (
+	"github.com/asynccnu/food_service/service"
 	"github.com/gin-gonic/gin"
 )
 
-type RestaurantForCanteen struct {
-	RestaurantName string `json:"restaurant_name"`
-	AveragePrice   string `json:"average_price"`
-	PictureURL     string `json:"picture_url"`
-	RestaurantID   string `json:"restaurant_id"`
-}
-
-type ResaurantList struct {
-	Restaurants *[]RestaurantForCanteen `json:"restaurant_for_canteen"`
+type ResaurantListResponse struct {
+	Restaurants *[]service.RestaurantForCanteen `json:"restaurants"`
 }
 
 //@Tags restaurant
@@ -23,7 +17,7 @@ type ResaurantList struct {
 //@Param page query integer true "页码"
 //@Param limit query integer true "每页最大数"
 //@Param canteen body integer true "按照id来给,食堂信息，哪个食堂，楼层"
-//@Success 200 {object} ResaurantList
+//@Success 200 {object} ResaurantListResponse
 //@Router /restaurant/list [get]
 func List(c *gin.Context) {
 

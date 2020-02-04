@@ -26,6 +26,14 @@ type SearchRestaurantModel struct {
 	PictureURL   string `json:"picture_url"`
 }
 
+// RestaurantForCanteen 用于在线菜单中
+type RestaurantForCanteen struct {
+	RestaurantName string  `json:"restaurant_name"`
+	AveragePrice   float32 `json:"average_price"`
+	PictureURL     string  `json:"picture_url"`
+	RestaurantID   uint32  `json:"restaurant_id"`
+}
+
 //----------------------------------------------------------------//
 //-----------------------------小写函数----------------------------////
 
@@ -116,4 +124,24 @@ func GetRestaurantDetailsByID(id uint32) (*model.RestaurantDetails, error) {
 		Menus:        Menus,
 	}
 	return &RD, err
+}
+
+// ListRestaurants 用于在线菜单
+func ListRestaurants(canteenID uint16, page, limit uint64) (*[]RestaurantForCanteen, error) {
+	restaurants, err := model.CRUDForListRestaurants(canteenID, page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []RestaurantForCanteen
+	for _, restaurant := range *restaurants {
+		resForCanteen := RestaurantForCanteen{
+			RestaurantName: restaurant.Name,
+			PictureURL:     restaurant.PictureURL,
+			RestaurantID:   restaurant.ID,
+			AveragePrice:   restaurant.AveragePrice,
+		}
+		result = append(result, resForCanteen)
+	}
+	return &result, nil
 }

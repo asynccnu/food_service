@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -36,7 +37,7 @@ type BaseModel struct {
 
 // CanteenModel 食堂model
 type CanteenModel struct {
-	ID     uint32 `gorm:"primary_key;AUTO_INCREMENT;column:id" json:"id"`
+	ID     uint16 `gorm:"primary_key;AUTO_INCREMENT;column:id" json:"id"`
 	Name   string `gorm:"column:name" json:"canteen_name"`
 	Storey uint8  `gorm:"column:storey" json:"storey"`
 }
@@ -138,4 +139,20 @@ func CRUDForSearchRestaurants(kws string, page, limit uint64) (*[]RestaurantMode
 		return nil, d.Error
 	}
 	return &Restaurants, nil
+}
+
+// CRUDForListRestaurants 用于在线菜单给出一些食堂
+func CRUDForListRestaurants(canteenID uint16, page, limit uint64) (*[]RestaurantModel, error) {
+	sql := fmt.Sprintf("select name, picture_url, average_price, id, hot from restaurant where location = %d order by hot desc limit %d, %d;", canteenID, page, limit)
+	var Restaurants []RestaurantModel
+	d := DB.Self.Raw(sql).Scan(&Restaurants)
+	if d.Error != nil {
+		return nil, d.Error
+	}
+	return &Restaurants, nil
+}
+
+// CRUDForSpecialFoods 用于特色推荐
+func CRUDForSpecialFoods(restaurantID uint32) {
+
 }

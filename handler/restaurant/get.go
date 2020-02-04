@@ -26,7 +26,6 @@ func Get(c *gin.Context) {
 		return
 	}
 
-	//RD为窗口详细信息
 	RestaurantDetails, err := service.GetRestaurantDetailsByID(uint32(id))
 	if err != nil {
 		handler.SendBadRequest(c, errno.ErrCRUD, nil, err.Error())

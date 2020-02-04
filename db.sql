@@ -8,7 +8,7 @@ USE food_service;
 
 
 CREATE TABLE `canteen` (
-  `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT 'cantenn',
   `storey` tinyint UNSIGNED NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
