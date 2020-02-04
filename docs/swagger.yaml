@@ -24,13 +24,6 @@ definitions:
           $ref: '#/definitions/food.FoodDetails'
         type: array
     type: object
-  model.Canteen:
-    properties:
-      canteen_name:
-        type: string
-      storey:
-        type: integer
-    type: object
   model.Menu:
     properties:
       name:
@@ -53,32 +46,6 @@ definitions:
       picture_url:
         type: string
     type: object
-  model.SearchFoodModel:
-    properties:
-      canteen_name:
-        type: string
-      name:
-        type: string
-      picture_url:
-        type: string
-      restaurant_name:
-        type: string
-      storey:
-        type: integer
-    type: object
-  model.SearchRestaurantModel:
-    properties:
-      canteen_name:
-        type: string
-      name:
-        type: string
-      picture_url:
-        type: string
-      restaurant_id:
-        type: integer
-      storey:
-        type: integer
-    type: object
   restaurant.RandomRestaurant:
     properties:
       average_price:
@@ -94,37 +61,63 @@ definitions:
       storey:
         type: integer
     type: object
-  restaurant.ResaurantList:
+  restaurant.ResaurantListResponse:
     properties:
-      restaurant_for_canteen:
+      restaurants:
         items:
-          $ref: '#/definitions/restaurant.RestaurantForCanteen'
+          $ref: '#/definitions/service.RestaurantForCanteen'
         type: array
-    type: object
-  restaurant.RestaurantForCanteen:
-    properties:
-      average_price:
-        type: string
-      picture_url:
-        type: string
-      restaurant_id:
-        type: string
-      restaurant_name:
-        type: string
     type: object
   search.SearchFoodResponse:
     properties:
       results:
         items:
-          $ref: '#/definitions/model.SearchFoodModel'
+          $ref: '#/definitions/service.SearchFoodModel'
         type: array
     type: object
   search.SearchRestaurantResponse:
     properties:
       results:
         items:
-          $ref: '#/definitions/model.SearchRestaurantModel'
+          $ref: '#/definitions/service.SearchRestaurantModel'
         type: array
+    type: object
+  service.RestaurantForCanteen:
+    properties:
+      average_price:
+        type: number
+      picture_url:
+        type: string
+      restaurant_id:
+        type: integer
+      restaurant_name:
+        type: string
+    type: object
+  service.SearchFoodModel:
+    properties:
+      canteen_name:
+        type: string
+      name:
+        type: string
+      picture_url:
+        type: string
+      restaurant_name:
+        type: string
+      storey:
+        type: integer
+    type: object
+  service.SearchRestaurantModel:
+    properties:
+      canteen_name:
+        type: string
+      name:
+        type: string
+      picture_url:
+        type: string
+      restaurant_id:
+        type: integer
+      storey:
+        type: integer
     type: object
 host: '....'
 info:
@@ -197,20 +190,19 @@ paths:
         name: limit
         required: true
         type: integer
-      - description: 食堂信息，哪个食堂，楼层
+      - description: 按照id来给,食堂信息，哪个食堂，楼层
         in: body
-        name: payload
+        name: canteen
         required: true
         schema:
-          $ref: '#/definitions/model.Canteen'
-          type: object
+          type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/restaurant.ResaurantList'
+            $ref: '#/definitions/restaurant.ResaurantListResponse'
       summary: 在线菜单
       tags:
       - restaurant

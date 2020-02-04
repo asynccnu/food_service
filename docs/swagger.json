@@ -110,13 +110,12 @@
                         "required": true
                     },
                     {
-                        "description": "食堂信息，哪个食堂，楼层",
-                        "name": "payload",
+                        "description": "按照id来给,食堂信息，哪个食堂，楼层",
+                        "name": "canteen",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Canteen"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -124,7 +123,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/restaurant.ResaurantList"
+                            "$ref": "#/definitions/restaurant.ResaurantListResponse"
                         }
                     }
                 }
@@ -295,17 +294,6 @@
                 }
             }
         },
-        "model.Canteen": {
-            "type": "object",
-            "properties": {
-                "canteen_name": {
-                    "type": "string"
-                },
-                "storey": {
-                    "type": "integer"
-                }
-            }
-        },
         "model.Menu": {
             "type": "object",
             "properties": {
@@ -340,46 +328,6 @@
                 }
             }
         },
-        "model.SearchFoodModel": {
-            "type": "object",
-            "properties": {
-                "canteen_name": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "picture_url": {
-                    "type": "string"
-                },
-                "restaurant_name": {
-                    "type": "string"
-                },
-                "storey": {
-                    "type": "integer"
-                }
-            }
-        },
-        "model.SearchRestaurantModel": {
-            "type": "object",
-            "properties": {
-                "canteen_name": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "picture_url": {
-                    "type": "string"
-                },
-                "restaurant_id": {
-                    "type": "integer"
-                },
-                "storey": {
-                    "type": "integer"
-                }
-            }
-        },
         "restaurant.RandomRestaurant": {
             "type": "object",
             "properties": {
@@ -403,31 +351,14 @@
                 }
             }
         },
-        "restaurant.ResaurantList": {
+        "restaurant.ResaurantListResponse": {
             "type": "object",
             "properties": {
-                "restaurant_for_canteen": {
+                "restaurants": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/restaurant.RestaurantForCanteen"
+                        "$ref": "#/definitions/service.RestaurantForCanteen"
                     }
-                }
-            }
-        },
-        "restaurant.RestaurantForCanteen": {
-            "type": "object",
-            "properties": {
-                "average_price": {
-                    "type": "string"
-                },
-                "picture_url": {
-                    "type": "string"
-                },
-                "restaurant_id": {
-                    "type": "string"
-                },
-                "restaurant_name": {
-                    "type": "string"
                 }
             }
         },
@@ -437,7 +368,7 @@
                 "results": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.SearchFoodModel"
+                        "$ref": "#/definitions/service.SearchFoodModel"
                     }
                 }
             }
@@ -448,8 +379,65 @@
                 "results": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.SearchRestaurantModel"
+                        "$ref": "#/definitions/service.SearchRestaurantModel"
                     }
+                }
+            }
+        },
+        "service.RestaurantForCanteen": {
+            "type": "object",
+            "properties": {
+                "average_price": {
+                    "type": "number"
+                },
+                "picture_url": {
+                    "type": "string"
+                },
+                "restaurant_id": {
+                    "type": "integer"
+                },
+                "restaurant_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.SearchFoodModel": {
+            "type": "object",
+            "properties": {
+                "canteen_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "picture_url": {
+                    "type": "string"
+                },
+                "restaurant_name": {
+                    "type": "string"
+                },
+                "storey": {
+                    "type": "integer"
+                }
+            }
+        },
+        "service.SearchRestaurantModel": {
+            "type": "object",
+            "properties": {
+                "canteen_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "picture_url": {
+                    "type": "string"
+                },
+                "restaurant_id": {
+                    "type": "integer"
+                },
+                "storey": {
+                    "type": "integer"
                 }
             }
         }

@@ -15,10 +15,6 @@ type RandomRestaurant struct {
 	Recommendation string  `json:"recommendation"`
 }
 
-type RandomRequest struct {
-	RestaurantName *[]string `json:"restaurant_name"`
-}
-
 //@Tags restaurant
 //@Summary 美食首页
 //@Description 美食首页的推荐窗口
