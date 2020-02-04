@@ -22,7 +22,7 @@ type ResaurantList struct {
 //@Produce json
 //@Param page query integer true "页码"
 //@Param limit query integer true "每页最大数"
-//@Param payload body model.Canteen true "食堂信息，哪个食堂，楼层"
+//@Param canteen body integer true "按照id来给,食堂信息，哪个食堂，楼层"
 //@Success 200 {object} ResaurantList
 //@Router /restaurant/list [get]
 func List(c *gin.Context) {

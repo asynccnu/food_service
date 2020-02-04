@@ -4,13 +4,13 @@ import (
 	"strconv"
 
 	"github.com/asynccnu/food_service/handler"
-	"github.com/asynccnu/food_service/model"
 	"github.com/asynccnu/food_service/pkg/errno"
+	"github.com/asynccnu/food_service/service"
 	"github.com/gin-gonic/gin"
 )
 
 type SearchFoodResponse struct {
-	Results []model.SearchFoodModel `json:"results"`
+	Results []service.SearchFoodModel `json:"results"`
 }
 
 //@Tags search
@@ -38,7 +38,7 @@ func SearchFood(c *gin.Context) {
 		return
 	}
 
-	Results, err := model.SearchForFoods(searchText, page, limit)
+	Results, err := service.SearchForFoods(searchText, page, limit)
 	if err != nil {
 		handler.SendBadRequest(c, errno.ErrCRUD, nil, err.Error())
 		return

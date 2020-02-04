@@ -1,11 +1,8 @@
 package model
 
 import (
-	"fmt"
 	"strconv"
 	"time"
-
-	"github.com/asynccnu/food_service/util"
 )
 
 // Canteen 食堂地址
@@ -68,11 +65,12 @@ func (r *RestaurantModel) TableName() string {
 type FoodModel struct {
 	BaseModel
 	Name         string  `gorm:"column:name" json:"name"`
-	RestaurantID uint32  `gorm:"column:restaurant" json:"restaurant_id"`
+	RestaurantID uint32  `gorm:"column:restaurant_id" json:"restaurant_id"`
 	Introduction string  `gorm:"column:introduction" json:"introduction"`
 	Ingredient   string  `gorm:"column:ingredient" json:"ingredient"`
 	Price        float32 `gorm:"column:price" json:"price"`
 	PictureURL   string  `gorm:"column:picture_url" json:"picture_url"`
+	IsSpecial    bool    `gorm:"column:is_special" json:"is_special"`
 }
 
 // TableName 用于gorm 表名字
@@ -82,7 +80,12 @@ func (f *FoodModel) TableName() string {
 
 //----------------------------------------------------------------//
 // 小写函数
-func getCanteen(id uint8) *Canteen {
+
+//----------------------------------------------------------------//
+// 大写函数
+
+// GetCanteen 获取餐厅信息
+func GetCanteen(id uint8) *Canteen {
 	var C CanteenModel
 	DB.Self.Where("id = ?", id).Find(&C)
 	return &Canteen{
@@ -90,9 +93,6 @@ func getCanteen(id uint8) *Canteen {
 		Storey:      C.Storey,
 	}
 }
-
-//----------------------------------------------------------------//
-// 大写函数
 
 // GetRestaurantByID 通过窗口ID获得 食堂model
 func GetRestaurantByID(id uint32) (*RestaurantModel, error) {
@@ -118,84 +118,24 @@ func GetMenusByRestaurantID(id uint32) (*[]Menu, error) {
 	return &Menus, d.Error
 }
 
-// SearchFoodModel 用于搜索返回
-type SearchFoodModel struct {
-	Name           string `json:"name"`
-	RestaurantName string `json:"restaurant_name"`
-	PictureURL     string `json:"picture_url"`
-
-	Canteen
-}
-
-// SearchForFoods 分词之后关键字用于数据库查询
-func SearchForFoods(st string, page, limit uint64) (*[]SearchFoodModel, error) {
-	var kws string
-	if len([]rune(st)) > 1 {
-		//分词
-		kws = util.SegWord(st)
-		if kws == "" {
-			err := fmt.Errorf("搜索词语过于简单")
-			return nil, err
-		}
-	} else {
-		kws = "'%" + st + "%'"
-	}
+// CRUDForSearchFoods 用于foods数据库查询
+func CRUDForSearchFoods(kws string, page, limit uint64) (*[]FoodModel, error) {
 	sql := "select restaurant_id, name, picture_url from food where name like " + kws + " limit " + strconv.Itoa(int((page-1)*limit)) + ", " + strconv.Itoa(int(limit))
-	var foods []FoodModel
-	d := DB.Self.Raw(sql).Scan(&foods)
+	var Foods []FoodModel
+	d := DB.Self.Raw(sql).Scan(&Foods)
 	if d.Error != nil {
 		return nil, d.Error
 	}
-	var Results []SearchFoodModel
-	for _, food := range foods {
-		restaurant, _ := GetRestaurantByID(food.RestaurantID)
-		result := SearchFoodModel{
-			Name:           food.Name,
-			RestaurantName: restaurant.Name,
-			PictureURL:     food.PictureURL,
-			Canteen:        *getCanteen(restaurant.Location),
-		}
-		Results = append(Results, result)
-	}
-	return &Results, nil
+	return &Foods, nil
 }
 
-// SearchRestaurantModel 用于搜索返回
-type SearchRestaurantModel struct {
-	Canteen
-
-	Name         string `json:"name"`
-	RestaurantID uint32 `json:"restaurant_id"`
-	PictureURL   string `json:"picture_url"`
-}
-
-// SearchForRestaurants 分词之后关键字用于数据库查询
-func SearchForRestaurants(st string, page, limit uint64) (*[]SearchRestaurantModel, error) {
-	var kws string
-	if len([]rune(st)) > 1 {
-		kws = util.SegWord(st)
-		if kws == "" {
-			err := fmt.Errorf("搜索词语过于简单")
-			return nil, err
-		}
-	} else {
-		kws = "'%" + st + "%'"
-	}
+// CRUDForSearchRestaurants 用于resta 数据库查询
+func CRUDForSearchRestaurants(kws string, page, limit uint64) (*[]RestaurantModel, error) {
 	sql := "select id, name, picture_url, location from restaurant where name like " + kws + " limit " + strconv.Itoa(int((page-1)*limit)) + ", " + strconv.Itoa(int(limit))
-	var restaurants []RestaurantModel
-	d := DB.Self.Raw(sql).Scan(&restaurants)
+	var Restaurants []RestaurantModel
+	d := DB.Self.Raw(sql).Scan(&Restaurants)
 	if d.Error != nil {
 		return nil, d.Error
 	}
-	var Results []SearchRestaurantModel
-	for _, restaurant := range restaurants {
-		result := SearchRestaurantModel{
-			Name:         restaurant.Name,
-			RestaurantID: restaurant.ID,
-			PictureURL:   restaurant.PictureURL,
-			Canteen:      *getCanteen(restaurant.Location),
-		}
-		Results = append(Results, result)
-	}
-	return &Results, nil
+	return &Restaurants, nil
 }
