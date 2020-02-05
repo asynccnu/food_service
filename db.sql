@@ -18,7 +18,7 @@ CREATE TABLE `canteen` (
 CREATE TABLE `restaurant` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT 'restaurant',
-  `location` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT "餐厅地点，用canteen id来标识.",
+  `location` smallint UNSIGNED NOT NULL DEFAULT 0 COMMENT "餐厅地点，用canteen id来标识.",
   `introduction` varchar(255),
   `average_price` float COMMENT "平均价格",
   `picture_url` varchar(255) COMMENT "照片URL",

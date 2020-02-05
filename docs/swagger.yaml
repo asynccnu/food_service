@@ -27,6 +27,7 @@ definitions:
       name:
         type: string
       picture_url:
+        description: 店家图片信息
         type: string
     type: object
   restaurant.ResaurantListResponse:
@@ -61,6 +62,7 @@ definitions:
       name:
         type: string
       picture_url:
+        description: 店家图片
         type: string
       resaurant_name:
         type: string
@@ -100,6 +102,7 @@ definitions:
       name:
         type: string
       picture_url:
+        description: 店家图片
         type: string
       restaurant_name:
         type: string

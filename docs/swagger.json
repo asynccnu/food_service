@@ -296,6 +296,7 @@
                     "type": "string"
                 },
                 "picture_url": {
+                    "description": "店家图片信息",
                     "type": "string"
                 }
             }
@@ -349,6 +350,7 @@
                     "type": "string"
                 },
                 "picture_url": {
+                    "description": "店家图片",
                     "type": "string"
                 },
                 "resaurant_name": {
@@ -409,6 +411,7 @@
                     "type": "string"
                 },
                 "picture_url": {
+                    "description": "店家图片",
                     "type": "string"
                 },
                 "restaurant_name": {

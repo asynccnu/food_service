@@ -150,7 +150,7 @@ func GetRestaurantDetailsByID(id uint32) (*model.RestaurantDetails, error) {
 }
 
 // ListRestaurants 用于在线菜单
-func ListRestaurants(canteenID uint8, page, limit uint64) (*[]RestaurantForCanteen, error) {
+func ListRestaurants(canteenID uint16, page, limit uint64) (*[]RestaurantForCanteen, error) {
 	restaurants, err := model.CRUDForListRestaurants(canteenID, page, limit)
 	if err != nil {
 		return nil, err

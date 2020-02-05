@@ -51,7 +51,7 @@ func (c *CanteenModel) TableName() string {
 type RestaurantModel struct {
 	BaseModel
 	Name         string  `gorm:"column:name" json:"name"`
-	Location     uint8   `gorm:"column:location" json:"location"`
+	Location     uint16  `gorm:"column:location" json:"location"`
 	Introduction string  `gorm:"column:introduction" json:"introduction"`
 	AveragePrice float32 `gorm:"column:average_price" json:"average_price"`
 	PictureURL   string  `gorm:"column:picture_url" json:"picture_url"`
@@ -85,7 +85,7 @@ func (f *FoodModel) TableName() string {
 // 大写函数
 
 // GetCanteen 获取餐厅信息
-func GetCanteen(id uint8) *Canteen {
+func GetCanteen(id uint16) *Canteen {
 	var C CanteenModel
 	DB.Self.Where("id = ?", id).Find(&C)
 	return &Canteen{
@@ -153,7 +153,7 @@ func CRUDForSearchRestaurants(kws string, page, limit uint64) (*[]RestaurantMode
 }
 
 // CRUDForListRestaurants 用于在线菜单给出一些食堂
-func CRUDForListRestaurants(canteenID uint8, page, limit uint64) (*[]RestaurantModel, error) {
+func CRUDForListRestaurants(canteenID uint16, page, limit uint64) (*[]RestaurantModel, error) {
 	sql := fmt.Sprintf("select name, picture_url, average_price, id from restaurant where location = %d order by hot desc limit %d, %d;", canteenID, (page-1)*limit, limit)
 	var Restaurants []RestaurantModel
 	d := DB.Self.Raw(sql).Scan(&Restaurants)

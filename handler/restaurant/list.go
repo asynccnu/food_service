@@ -43,7 +43,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	Results, err := service.ListRestaurants(uint8(canteenID), page, limit)
+	Results, err := service.ListRestaurants(uint16(canteenID), page, limit)
 	if err != nil {
 		handler.SendError(c, errno.ErrCRUD, nil, err.Error())
 		return
