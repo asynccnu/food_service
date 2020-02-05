@@ -34,6 +34,29 @@ type RestaurantForCanteen struct {
 	RestaurantID   uint32  `json:"restaurant_id"`
 }
 
+// FoodDetailsForRecommend 用于华师必吃
+type FoodDetailsForRecommend struct {
+	Name string `json:"name"`
+
+	RestaurantName string `json:"resaurant_name"`
+	model.Canteen
+
+	Ingredient   string `json:"ingredient"`
+	Introduction string `json:"introduction"`
+	PictureURL   string `json:"picture_url"`
+}
+
+// RandomRestaurant 用于美食首页
+type RandomRestaurant struct {
+	RestaurantName string `json:"restaurant_name"`
+
+	model.Canteen
+
+	AveragePrice   float64 `json:"average_price"`
+	PictureURL     string  `json:"picture_url"`
+	Recommendation string  `json:"recommendation"`
+}
+
 //----------------------------------------------------------------//
 //-----------------------------小写函数----------------------------////
 
@@ -127,13 +150,13 @@ func GetRestaurantDetailsByID(id uint32) (*model.RestaurantDetails, error) {
 }
 
 // ListRestaurants 用于在线菜单
-func ListRestaurants(canteenID uint16, page, limit uint64) (*[]RestaurantForCanteen, error) {
+func ListRestaurants(canteenID uint8, page, limit uint64) (*[]RestaurantForCanteen, error) {
 	restaurants, err := model.CRUDForListRestaurants(canteenID, page, limit)
 	if err != nil {
 		return nil, err
 	}
 
-	var result []RestaurantForCanteen
+	var Result []RestaurantForCanteen
 	for _, restaurant := range *restaurants {
 		resForCanteen := RestaurantForCanteen{
 			RestaurantName: restaurant.Name,
@@ -141,7 +164,38 @@ func ListRestaurants(canteenID uint16, page, limit uint64) (*[]RestaurantForCant
 			RestaurantID:   restaurant.ID,
 			AveragePrice:   restaurant.AveragePrice,
 		}
-		result = append(result, resForCanteen)
+		Result = append(Result, resForCanteen)
 	}
-	return &result, nil
+	return &Result, nil
 }
+
+// RecommendFoods 用于华师必吃
+func RecommendFoods(page, limit uint64) (*[]FoodDetailsForRecommend, error) {
+	foods, err := model.CRUDForRecommendedFoods(page, limit)
+	if err != nil {
+		return nil, err
+	}
+	var Results []FoodDetailsForRecommend
+	for _, food := range *foods {
+		restaurant, err := model.GetRestaurantByID(food.RestaurantID)
+		if err != nil {
+			return nil, err
+		}
+		result := FoodDetailsForRecommend{
+			Name:         food.Name,
+			Ingredient:   food.Ingredient,
+			Introduction: food.Introduction,
+			PictureURL:   food.PictureURL,
+			//下面是食堂信息
+			Canteen:        *model.GetCanteen(restaurant.Location),
+			RestaurantName: restaurant.Name,
+		}
+		Results = append(Results, result)
+	}
+	return &Results, nil
+}
+
+// // GetRandomRestaurant 用于美食首页返回一个商家
+// func GetRandomRestaurant(page uint64) (*RandomRestaurant, error) {
+
+// }

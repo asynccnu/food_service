@@ -40,7 +40,7 @@ func SearchFood(c *gin.Context) {
 
 	Results, err := service.SearchForFoods(searchText, page, limit)
 	if err != nil {
-		handler.SendBadRequest(c, errno.ErrCRUD, nil, err.Error())
+		handler.SendError(c, errno.ErrCRUD, nil, err.Error())
 		return
 	}
 	handler.SendResponse(c, nil, *Results)

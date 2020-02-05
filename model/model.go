@@ -105,6 +105,18 @@ func GetRestaurantByID(id uint32) (*RestaurantModel, error) {
 	return &Restaurant, d.Error
 }
 
+/*
+// GetRestaurantForFoodByID 通过窗口ID获得 食堂model,只有名字和位置
+func GetRestaurantForFoodByID(id uint32) (*RestaurantModel, error) {
+	var Restaurant RestaurantModel
+	d := DB.Self.Where("id = ?", id).Find(&Restaurant)
+	if d.Error != nil {
+		return nil, d.Error
+	}
+	return &Restaurant, d.Error
+}
+*/
+
 //GetMenusByRestaurantID 通过窗口ID获得 食堂窗口的菜单，菜单信息有名字，价格。
 func GetMenusByRestaurantID(id uint32) (*[]Menu, error) {
 	var Menus []Menu
@@ -142,8 +154,8 @@ func CRUDForSearchRestaurants(kws string, page, limit uint64) (*[]RestaurantMode
 }
 
 // CRUDForListRestaurants 用于在线菜单给出一些食堂
-func CRUDForListRestaurants(canteenID uint16, page, limit uint64) (*[]RestaurantModel, error) {
-	sql := fmt.Sprintf("select name, picture_url, average_price, id, hot from restaurant where location = %d order by hot desc limit %d, %d;", canteenID, page, limit)
+func CRUDForListRestaurants(canteenID uint8, page, limit uint64) (*[]RestaurantModel, error) {
+	sql := fmt.Sprintf("select name, picture_url, average_price, id from restaurant where location = %d order by hot desc limit %d, %d;", canteenID, (page-1)*limit, limit)
 	var Restaurants []RestaurantModel
 	d := DB.Self.Raw(sql).Scan(&Restaurants)
 	if d.Error != nil {
@@ -156,3 +168,16 @@ func CRUDForListRestaurants(canteenID uint16, page, limit uint64) (*[]Restaurant
 func CRUDForSpecialFoods(restaurantID uint32) {
 
 }
+
+// CRUDForRecommendedFoods 用于华师必吃
+func CRUDForRecommendedFoods(page, limit uint64) (*[]FoodModel, error) {
+	sql := fmt.Sprintf("select name, ingredient, introduction, picture_url, restaurant_id from food order by hot desc limit %d, %d;", (page-1)*limit, limit)
+	var Foods []FoodModel
+	d := DB.Self.Raw(sql).Scan(&Foods)
+	if d.Error != nil {
+		return nil, d.Error
+	}
+	return &Foods, nil
+}
+
+// func CRUDForRandomRestaurant(page)

@@ -1,23 +1,16 @@
 package food
 
 import (
-	"github.com/asynccnu/food_service/model"
+	"strconv"
+
+	"github.com/asynccnu/food_service/handler"
+	"github.com/asynccnu/food_service/pkg/errno"
+	"github.com/asynccnu/food_service/service"
 	"github.com/gin-gonic/gin"
 )
 
-type FoodDetails struct {
-	Name string `json:"name"`
-
-	ResaurantName string `json:"resaurant_name"`
-	model.Canteen
-
-	Ingredient   string `json:"ingredient"`
-	Introduction string `json:"introduction"`
-	PictureURL   string `json:"picture_url"`
-}
-
 type FoodList struct {
-	FoodList *[]FoodDetails `json:"food_list"`
+	FoodList *[]service.FoodDetailsForRecommend `json:"food_list"`
 }
 
 //@Tags food
@@ -30,5 +23,21 @@ type FoodList struct {
 //@Success 200 {object} FoodList
 //@Router /food/recommend [get]
 func Recommend(c *gin.Context) {
-
+	pageStr := c.DefaultQuery("page", "1")
+	page, err := strconv.ParseUint(pageStr, 10, 64)
+	if err != nil {
+		handler.SendBadRequest(c, errno.ErrGetQuery, nil, err.Error())
+		return
+	}
+	limitStr := c.DefaultQuery("limit", "10")
+	limit, err := strconv.ParseUint(limitStr, 10, 64)
+	if err != nil {
+		handler.SendBadRequest(c, errno.ErrGetQuery, nil, err.Error())
+		return
+	}
+	Results, err := service.RecommendFoods(page, limit)
+	if err != nil {
+		handler.SendError(c, errno.ErrCRUD, nil, err.Error())
+	}
+	handler.SendResponse(c, nil, *Results)
 }

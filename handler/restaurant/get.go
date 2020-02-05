@@ -28,7 +28,7 @@ func Get(c *gin.Context) {
 
 	RestaurantDetails, err := service.GetRestaurantDetailsByID(uint32(id))
 	if err != nil {
-		handler.SendBadRequest(c, errno.ErrCRUD, nil, err.Error())
+		handler.SendError(c, errno.ErrCRUD, nil, err.Error())
 		return
 	}
 

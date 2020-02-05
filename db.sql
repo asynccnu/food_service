@@ -22,7 +22,7 @@ CREATE TABLE `restaurant` (
   `introduction` varchar(255),
   `average_price` float COMMENT "平均价格",
   `picture_url` varchar(255) COMMENT "照片URL",
-  `hot` bigint UNSIGNED COMMENT "热度，用于推荐食堂",
+  `hot` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT "热度，用于推荐食堂",
   -- 不知道要不要
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `food` (
   `price` float COMMENT "价格",
   `picture_url` varchar(255) COMMENT "照片URL",
   `is_special` tinyint UNSIGNED COMMENT "是否为特色推荐",
-  `hot` bigint UNSIGNED COMMENT "热度，用于华师必吃",
+  `hot` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT "热度，用于华师必吃",
   -- 不知道要不要
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
