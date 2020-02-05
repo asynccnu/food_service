@@ -29,7 +29,8 @@ CREATE TABLE `restaurant` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
-  KEY `location` (`location`)
+  KEY `location` (`location`),
+  KEY `hot` (`hot`)
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8MB4;
 
 
@@ -40,7 +41,6 @@ CREATE TABLE `food` (
   `introduction` varchar(255),
   `ingredient` varchar(255) COMMENT "原料， 食材",
   `price` float COMMENT "价格",
-  `picture_url` varchar(255) COMMENT "照片URL",
   `is_special` tinyint UNSIGNED COMMENT "是否为特色推荐",
   `hot` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT "热度，用于华师必吃",
   -- 不知道要不要
@@ -50,7 +50,8 @@ CREATE TABLE `food` (
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
   KEY `restaurant_id` (`restaurant_id`),
-  KEY `is_special` (`is_special`)
+  KEY `is_special` (`is_special`),
+  KEY `hot` (`hot`)
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8MB4;
 
 

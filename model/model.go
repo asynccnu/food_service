@@ -23,7 +23,7 @@ type RestaurantDetails struct {
 	Name         string  `json:"name"`
 	Introduction string  `json:"introduction"`
 	AveragePrice float32 `json:"average_price"`
-	PictureURL   string  `json:"picture_url"`
+	PictureURL   string  `json:"picture_url"` //店家图片信息
 	Menus        *[]Menu `json:"menus"`
 }
 
@@ -70,7 +70,6 @@ type FoodModel struct {
 	Introduction string  `gorm:"column:introduction" json:"introduction"`
 	Ingredient   string  `gorm:"column:ingredient" json:"ingredient"`
 	Price        float32 `gorm:"column:price" json:"price"`
-	PictureURL   string  `gorm:"column:picture_url" json:"picture_url"`
 	IsSpecial    bool    `gorm:"column:is_special" json:"is_special"`
 }
 
@@ -133,7 +132,7 @@ func GetMenusByRestaurantID(id uint32) (*[]Menu, error) {
 
 // CRUDForSearchFoods 用于foods数据库查询
 func CRUDForSearchFoods(kws string, page, limit uint64) (*[]FoodModel, error) {
-	sql := "select restaurant_id, name, picture_url from food where name like " + kws + " limit " + strconv.Itoa(int((page-1)*limit)) + ", " + strconv.Itoa(int(limit))
+	sql := "select restaurant_id, name from food where name like " + kws + " limit " + strconv.Itoa(int((page-1)*limit)) + ", " + strconv.Itoa(int(limit))
 	var Foods []FoodModel
 	d := DB.Self.Raw(sql).Scan(&Foods)
 	if d.Error != nil {
@@ -171,7 +170,7 @@ func CRUDForSpecialFoods(restaurantID uint32) {
 
 // CRUDForRecommendedFoods 用于华师必吃
 func CRUDForRecommendedFoods(page, limit uint64) (*[]FoodModel, error) {
-	sql := fmt.Sprintf("select name, ingredient, introduction, picture_url, restaurant_id from food order by hot desc limit %d, %d;", (page-1)*limit, limit)
+	sql := fmt.Sprintf("select name, ingredient, introduction, restaurant_id from food order by hot desc limit %d, %d;", (page-1)*limit, limit)
 	var Foods []FoodModel
 	d := DB.Self.Raw(sql).Scan(&Foods)
 	if d.Error != nil {

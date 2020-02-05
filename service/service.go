@@ -12,7 +12,7 @@ import (
 type SearchFoodModel struct {
 	Name           string `json:"name"`
 	RestaurantName string `json:"restaurant_name"`
-	PictureURL     string `json:"picture_url"`
+	PictureURL     string `json:"picture_url"` //店家图片
 
 	model.Canteen
 }
@@ -43,7 +43,7 @@ type FoodDetailsForRecommend struct {
 
 	Ingredient   string `json:"ingredient"`
 	Introduction string `json:"introduction"`
-	PictureURL   string `json:"picture_url"`
+	PictureURL   string `json:"picture_url"` //店家图片
 }
 
 // RandomRestaurant 用于美食首页
@@ -97,7 +97,7 @@ func SearchForFoods(st string, page, limit uint64) (*[]SearchFoodModel, error) {
 		result := SearchFoodModel{
 			Name:           food.Name,
 			RestaurantName: restaurant.Name,
-			PictureURL:     food.PictureURL,
+			PictureURL:     restaurant.PictureURL,
 			Canteen:        *model.GetCanteen(restaurant.Location),
 		}
 		Results = append(Results, result)
@@ -185,7 +185,7 @@ func RecommendFoods(page, limit uint64) (*[]FoodDetailsForRecommend, error) {
 			Name:         food.Name,
 			Ingredient:   food.Ingredient,
 			Introduction: food.Introduction,
-			PictureURL:   food.PictureURL,
+			PictureURL:   restaurant.PictureURL,
 			//下面是食堂信息
 			Canteen:        *model.GetCanteen(restaurant.Location),
 			RestaurantName: restaurant.Name,
