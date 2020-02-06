@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -81,8 +82,47 @@ func (f *FoodModel) TableName() string {
 //----------------------------------------------------------------//
 // 小写函数
 
+// GetCanteenIDs 通过食堂名字(多个名字) 返回id，但是有多个id
+func getCanteenIDs(canteenName string) (string, error) {
+	var canteens []CanteenModel
+	canteenNameSlice := strings.Split(canteenName, ",")
+	//sqlCanteenNameSlice 为加了''的餐厅名字，用于sql语句中
+	var sqlCanteenNameSlice []string
+	for _, canteen := range canteenNameSlice {
+		sql := fmt.Sprintf("'%s'", canteen)
+		sqlCanteenNameSlice = append(sqlCanteenNameSlice, sql)
+	}
+	sqlCanteenName := strings.Join(sqlCanteenNameSlice, ",")
+	sql := fmt.Sprintf("select id from canteen where name in (%s)", sqlCanteenName)
+	d := DB.Self.Raw(sql).Scan(&canteens)
+	if d.Error != nil {
+		return "", d.Error
+	}
+	var Result string
+	for _, c := range canteens {
+		Result += fmt.Sprintf("%d, ", c.ID)
+	}
+	Result = strings.TrimSuffix(Result, ", ")
+	return Result, nil
+}
+
 //----------------------------------------------------------------//
 // 大写函数
+
+// GetRecommendationByID 用于特色推荐
+func GetRecommendationByID(restaurantID uint32) (*[]string, error) {
+	sql := fmt.Sprintf("select name from food where restaurant_id = %d and is_special = 1", restaurantID)
+	var foods []FoodModel
+	d := DB.Self.Raw(sql).Scan(&foods)
+	if d.Error != nil {
+		return nil, d.Error
+	}
+	var Recommendations []string
+	for _, food := range foods {
+		Recommendations = append(Recommendations, food.Name)
+	}
+	return &Recommendations, nil
+}
 
 // GetCanteen 获取餐厅信息
 func GetCanteen(id uint16) *Canteen {
@@ -92,6 +132,17 @@ func GetCanteen(id uint16) *Canteen {
 		CanteenName: C.Name,
 		Storey:      C.Storey,
 	}
+}
+
+// GetCanteenID 通过食堂名字和楼层返回canteenID
+func GetCanteenID(canteenName string, storey uint8) (uint16, error) {
+	var C CanteenModel
+	sql := fmt.Sprintf("select id from canteen where name = '%s' and storey = %d", canteenName, storey)
+	d := DB.Self.Raw(sql).Scan(&C)
+	if d.Error != nil {
+		return 0, d.Error
+	}
+	return C.ID, nil
 }
 
 // GetRestaurantByID 通过窗口ID获得 食堂model
@@ -163,11 +214,6 @@ func CRUDForListRestaurants(canteenID uint16, page, limit uint64) (*[]Restaurant
 	return &Restaurants, nil
 }
 
-// CRUDForSpecialFoods 用于特色推荐
-func CRUDForSpecialFoods(restaurantID uint32) {
-
-}
-
 // CRUDForRecommendedFoods 用于华师必吃
 func CRUDForRecommendedFoods(page, limit uint64) (*[]FoodModel, error) {
 	sql := fmt.Sprintf("select name, ingredient, introduction, restaurant_id from food order by hot desc limit %d, %d;", (page-1)*limit, limit)
@@ -179,4 +225,17 @@ func CRUDForRecommendedFoods(page, limit uint64) (*[]FoodModel, error) {
 	return &Foods, nil
 }
 
-// func CRUDForRandomRestaurant(page)
+// CRUDForRecommendedRestaurants 用于首页推荐
+func CRUDForRecommendedRestaurants(canteenName string, page, limit uint64) (*[]RestaurantModel, error) {
+	canteenIDs, err := getCanteenIDs(canteenName)
+	if err != nil {
+		return nil, err
+	}
+	sql := fmt.Sprintf("select name, id, picture_url, average_price, location from restaurant where location in (%s) order by hot desc limit %d, %d", canteenIDs, (page-1)*limit, limit)
+	var Restaurants []RestaurantModel
+	d := DB.Self.Raw(sql).Scan(&Restaurants)
+	if d.Error != nil {
+		return nil, d.Error
+	}
+	return &Restaurants, nil
+}

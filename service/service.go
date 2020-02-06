@@ -46,15 +46,15 @@ type FoodDetailsForRecommend struct {
 	PictureURL   string `json:"picture_url"` //店家图片
 }
 
-// RandomRestaurant 用于美食首页
-type RandomRestaurant struct {
+// RecommendRestaurant 用于美食首页
+type RecommendRestaurant struct {
 	RestaurantName string `json:"restaurant_name"`
 
 	model.Canteen
 
-	AveragePrice   float64 `json:"average_price"`
-	PictureURL     string  `json:"picture_url"`
-	Recommendation string  `json:"recommendation"`
+	AveragePrice    float32  `json:"average_price"`
+	PictureURL      string   `json:"picture_url"`
+	Recommendations []string `json:"recommendation"`
 }
 
 //----------------------------------------------------------------//
@@ -150,7 +150,11 @@ func GetRestaurantDetailsByID(id uint32) (*model.RestaurantDetails, error) {
 }
 
 // ListRestaurants 用于在线菜单
-func ListRestaurants(canteenID uint16, page, limit uint64) (*[]RestaurantForCanteen, error) {
+func ListRestaurants(canteenName string, page, limit uint64, storey uint8) (*[]RestaurantForCanteen, error) {
+	canteenID, err := model.GetCanteenID(canteenName, storey)
+	if err != nil {
+		return nil, err
+	}
 	restaurants, err := model.CRUDForListRestaurants(canteenID, page, limit)
 	if err != nil {
 		return nil, err
@@ -195,7 +199,26 @@ func RecommendFoods(page, limit uint64) (*[]FoodDetailsForRecommend, error) {
 	return &Results, nil
 }
 
-// // GetRandomRestaurant 用于美食首页返回一个商家
-// func GetRandomRestaurant(page uint64) (*RandomRestaurant, error) {
-
-// }
+// RecommendRestaurants 用于美食首页返回一个商家
+func RecommendRestaurants(canteenName string, page, limit uint64) (*[]RecommendRestaurant, error) {
+	restaurants, err := model.CRUDForRecommendedRestaurants(canteenName, page, limit)
+	if err != nil {
+		return nil, err
+	}
+	var Results []RecommendRestaurant
+	for _, restaurant := range *restaurants {
+		recommendations, err := model.GetRecommendationByID(restaurant.ID)
+		if err != nil {
+			return nil, err
+		}
+		result := RecommendRestaurant{
+			RestaurantName:  restaurant.Name,
+			AveragePrice:    restaurant.AveragePrice,
+			PictureURL:      restaurant.PictureURL,
+			Canteen:         *model.GetCanteen(restaurant.Location),
+			Recommendations: *recommendations,
+		}
+		Results = append(Results, result)
+	}
+	return &Results, nil
+}

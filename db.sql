@@ -11,7 +11,8 @@ CREATE TABLE `canteen` (
   `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT 'cantenn',
   `storey` tinyint UNSIGNED NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`) 
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8MB4;
 
 

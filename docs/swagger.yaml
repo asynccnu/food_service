@@ -69,7 +69,7 @@ definitions:
       storey:
         type: integer
     type: object
-  service.RandomRestaurant:
+  service.RecommendRestaurant:
     properties:
       average_price:
         type: number
@@ -78,7 +78,9 @@ definitions:
       picture_url:
         type: string
       recommendation:
-        type: string
+        items:
+          type: string
+        type: array
       restaurant_name:
         type: string
       storey:
@@ -193,9 +195,14 @@ paths:
         name: limit
         required: true
         type: integer
-      - description: 按照id来给,食堂信息，哪个食堂，楼层
+      - description: cantenn_name,按照id来给,食堂信息，哪个食堂, 例如学子
         in: query
         name: c
+        required: true
+        type: string
+      - description: stoery,楼层, 例如1代表一楼
+        in: query
+        name: s
         required: true
         type: integer
       produces:
@@ -208,12 +215,22 @@ paths:
       summary: 在线菜单
       tags:
       - restaurant
-  /restaurant/random:
+  /restaurant/recommend:
     get:
       consumes:
       - application/json
       description: 美食首页的推荐窗口
       parameters:
+      - description: 第几页， page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每页多少个， limit
+        in: query
+        name: limit
+        required: true
+        type: integer
       - description: 食堂名字, 例如东一，学子
         in: body
         name: canteen_name
@@ -226,7 +243,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/service.RandomRestaurant'
+            $ref: '#/definitions/service.RecommendRestaurant'
       summary: 美食首页
       tags:
       - restaurant

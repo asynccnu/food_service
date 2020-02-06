@@ -110,9 +110,16 @@
                         "required": true
                     },
                     {
-                        "type": "integer",
-                        "description": "按照id来给,食堂信息，哪个食堂，楼层",
+                        "type": "string",
+                        "description": "cantenn_name,按照id来给,食堂信息，哪个食堂, 例如学子",
                         "name": "c",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "stoery,楼层, 例如1代表一楼",
+                        "name": "s",
                         "in": "query",
                         "required": true
                     }
@@ -127,7 +134,7 @@
                 }
             }
         },
-        "/restaurant/random": {
+        "/restaurant/recommend": {
             "get": {
                 "description": "美食首页的推荐窗口",
                 "consumes": [
@@ -142,6 +149,20 @@
                 "summary": "美食首页",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "第几页， page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页多少个， limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "食堂名字, 例如东一，学子",
                         "name": "canteen_name",
                         "in": "body",
@@ -155,7 +176,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/service.RandomRestaurant"
+                            "$ref": "#/definitions/service.RecommendRestaurant"
                         }
                     }
                 }
@@ -361,7 +382,7 @@
                 }
             }
         },
-        "service.RandomRestaurant": {
+        "service.RecommendRestaurant": {
             "type": "object",
             "properties": {
                 "average_price": {
@@ -374,7 +395,10 @@
                     "type": "string"
                 },
                 "recommendation": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "restaurant_name": {
                     "type": "string"
