@@ -214,7 +214,7 @@ paths:
       - application/json
       description: 美食首页的推荐窗口
       parameters:
-      - description: 食堂名字
+      - description: 食堂名字, 例如东一，学子
         in: body
         name: canteen_name
         required: true

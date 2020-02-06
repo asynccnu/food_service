@@ -142,7 +142,7 @@
                 "summary": "美食首页",
                 "parameters": [
                     {
-                        "description": "食堂名字",
+                        "description": "食堂名字, 例如东一，学子",
                         "name": "canteen_name",
                         "in": "body",
                         "required": true,
