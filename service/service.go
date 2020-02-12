@@ -199,9 +199,9 @@ func RecommendFoods(page, limit uint64) (*[]FoodDetailsForRecommend, error) {
 	return &Results, nil
 }
 
-// RecommendRestaurants 用于美食首页返回一个商家
-func RecommendRestaurants(canteenName string, page, limit uint64) (*[]RecommendRestaurant, error) {
-	restaurants, err := model.CRUDForRecommendedRestaurants(canteenName, page, limit)
+// RecommendRestaurants 用于美食首页返回一个商家,随机给出
+func RecommendRestaurants(canteenName string, limit uint64) (*[]RecommendRestaurant, error) {
+	restaurants, err := model.CRUDForRecommendedRestaurants(canteenName, limit)
 	if err != nil {
 		return nil, err
 	}

@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"math/rand"
 	"strconv"
 	"strings"
 	"time"
@@ -226,12 +227,14 @@ func CRUDForRecommendedFoods(page, limit uint64) (*[]FoodModel, error) {
 }
 
 // CRUDForRecommendedRestaurants 用于首页推荐
-func CRUDForRecommendedRestaurants(canteenName string, page, limit uint64) (*[]RestaurantModel, error) {
+func CRUDForRecommendedRestaurants(canteenName string, limit uint64) (*[]RestaurantModel, error) {
 	canteenIDs, err := getCanteenIDs(canteenName)
 	if err != nil {
 		return nil, err
 	}
-	sql := fmt.Sprintf("select name, id, picture_url, average_price, location from restaurant where location in (%s) order by hot desc limit %d, %d", canteenIDs, (page-1)*limit, limit)
+	seed := rand.NewSource(time.Now().Unix())
+	r := rand.New(seed)
+	sql := fmt.Sprintf("select name, id, picture_url, average_price, location from restaurant where location in (%s) order by hot desc limit %d, %d", canteenIDs, r.Intn(30), limit)
 	var Restaurants []RestaurantModel
 	d := DB.Self.Raw(sql).Scan(&Restaurants)
 	if d.Error != nil {

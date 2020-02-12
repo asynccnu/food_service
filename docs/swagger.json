@@ -134,7 +134,7 @@
                 }
             }
         },
-        "/restaurant/recommend": {
+        "/restaurant/random": {
             "get": {
                 "description": "美食首页的推荐窗口",
                 "consumes": [
@@ -150,20 +150,13 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "第几页， page",
-                        "name": "page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "每页多少个， limit",
+                        "description": "每页多少个， limit, 默认为一个",
                         "name": "limit",
                         "in": "query",
                         "required": true
                     },
                     {
-                        "description": "食堂名字, 例如东一，学子",
+                        "description": "食堂名字, 例如东一，学子   注意逗号之间不能有空格，并且为英文逗号",
                         "name": "canteen_name",
                         "in": "body",
                         "required": true,

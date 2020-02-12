@@ -18,19 +18,12 @@ type Request struct {
 //@Description 美食首页的推荐窗口
 //@Accept json
 //@Produce json
-//@Param page query integer true "第几页， page"
-//@Param limit query integer true "每页多少个， limit"
-//@Param canteen_name body string true "食堂名字, 例如东一，学子"
+//@Param limit query integer true "每页多少个， limit, 默认为一个"
+//@Param canteen_name body string true "食堂名字, 例如东一，学子   注意逗号之间不能有空格，并且为英文逗号"
 //@Success 200 {object} service.RecommendRestaurant
-//@Router /restaurant/recommend [get]
-func Recommend(c *gin.Context) {
-	pageStr := c.DefaultQuery("page", "1")
-	page, err := strconv.ParseUint(pageStr, 10, 64)
-	if err != nil {
-		handler.SendBadRequest(c, errno.ErrGetQuery, nil, err.Error())
-		return
-	}
-	limitStr := c.DefaultQuery("limit", "10")
+//@Router /restaurant/random [get]
+func Random(c *gin.Context) {
+	limitStr := c.DefaultQuery("limit", "1")
 	limit, err := strconv.ParseUint(limitStr, 10, 64)
 	if err != nil {
 		handler.SendBadRequest(c, errno.ErrGetQuery, nil, err.Error())
@@ -41,7 +34,7 @@ func Recommend(c *gin.Context) {
 		handler.SendBadRequest(c, errno.ErrBind, nil, err.Error())
 		return
 	}
-	Results, err := service.RecommendRestaurants(r.CanteenName, page, limit)
+	Results, err := service.RecommendRestaurants(r.CanteenName, limit)
 	if err != nil {
 		handler.SendError(c, errno.ErrCRUD, nil, err.Error())
 		return
