@@ -41,6 +41,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	{
 		sear.GET("/food", search.SearchFood)
 		sear.GET("/restaurant", search.SearchRestaurant)
+		sear.GET("/hot", search.HotSearch)
 	}
 
 	rest := g.Group("/api/v1/restaurant")

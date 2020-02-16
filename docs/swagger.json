@@ -221,6 +221,29 @@
                 }
             }
         },
+        "/search/hot": {
+            "get": {
+                "description": "搜索返回字符串数组",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "search"
+                ],
+                "summary": "热门搜索",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/search.HotSearchResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/search/restaurant": {
             "get": {
                 "description": "搜索返回一个list",
@@ -322,6 +345,17 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/service.RestaurantForCanteen"
+                    }
+                }
+            }
+        },
+        "search.HotSearchResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
                 }
             }

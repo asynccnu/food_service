@@ -37,6 +37,13 @@ definitions:
           $ref: '#/definitions/service.RestaurantForCanteen'
         type: array
     type: object
+  search.HotSearchResponse:
+    properties:
+      result:
+        items:
+          type: string
+        type: array
+    type: object
   search.SearchFoodResponse:
     properties:
       results:
@@ -271,6 +278,21 @@ paths:
           schema:
             $ref: '#/definitions/search.SearchFoodResponse'
       summary: 搜索食物
+      tags:
+      - search
+  /search/hot:
+    get:
+      consumes:
+      - application/json
+      description: 搜索返回字符串数组
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/search.HotSearchResponse'
+      summary: 热门搜索
       tags:
       - search
   /search/restaurant:

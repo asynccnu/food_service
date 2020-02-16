@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/asynccnu/food_service/model"
+
 	"github.com/gin-gonic/gin"
 	"github.com/huichen/sego"
 	"github.com/teris-io/shortid"
@@ -49,11 +51,10 @@ func SegWord(str interface{}) (sql string) {
 		slice := strings.Split(wds, " ")
 		for _, wd := range slice {
 			w := strings.Split(wd, "/")[0]
-			if (strings.Count(w, "") - 1) >= 2 {
-				if i, _ := strconv.Atoi(w); i == 0 { //如果为0，则表示非数字
-					w = "'%" + w + "%'"
-					wdslice = append(wdslice, w)
-				}
+			if i, _ := strconv.Atoi(w); i == 0 && w != "0" { //如果为0，则表示非数字
+				w = "'%" + w + "%'"
+				_ = model.AddNewSearchRecord(w)
+				wdslice = append(wdslice, w)
 			}
 		}
 		sql = strings.Join(wdslice, " or name like ")

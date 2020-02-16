@@ -63,6 +63,8 @@ type RecommendRestaurant struct {
 func getKeyWords(st string) string {
 	var kws string
 
+	_ = model.AddNewSearchRecord(st)
+
 	if len([]rune(st)) > 1 {
 		//分词
 		kws = util.SegWord(st)
@@ -221,4 +223,9 @@ func RecommendRestaurants(canteenName string, limit uint64) (*[]RecommendRestaur
 		Results = append(Results, result)
 	}
 	return &Results, nil
+}
+
+func GetHotSearch() ([]string, error) {
+	result, err := model.GetHotSearch()
+	return result, err
 }

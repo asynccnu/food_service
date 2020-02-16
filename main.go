@@ -61,6 +61,10 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
+	// init redis
+	model.RedisDb.Init()
+	defer model.RedisDb.Close()
+
 	// Set gin mode.
 	gin.SetMode(viper.GetString("runmode"))
 
