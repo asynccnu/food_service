@@ -39,6 +39,7 @@ func SearchRestaurant(c *gin.Context) {
 	}
 
 	Results, err := service.SearchForRestaurants(searchText, page, limit)
+	// 因为err返回的可能基本只有是CRUD出错了，所以返回errno.CRUD
 	if err != nil {
 		handler.SendError(c, errno.ErrCRUD, nil, err.Error())
 		return

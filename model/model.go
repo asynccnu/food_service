@@ -3,7 +3,6 @@ package model
 import (
 	"fmt"
 	"math/rand"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -184,7 +183,7 @@ func GetMenusByRestaurantID(id uint32) (*[]Menu, error) {
 
 // CRUDForSearchFoods 用于foods数据库查询
 func CRUDForSearchFoods(kws string, page, limit uint64) (*[]FoodModel, error) {
-	sql := "select restaurant_id, name from food where name like " + kws + " limit " + strconv.Itoa(int((page-1)*limit)) + ", " + strconv.Itoa(int(limit))
+	sql := fmt.Sprintf("select restaurant_id, name from food where name like %s order by hot desc limit %d,%d", kws, (page-1)*limit, limit)
 	var Foods []FoodModel
 	d := DB.Self.Raw(sql).Scan(&Foods)
 	if d.Error != nil {
@@ -195,7 +194,7 @@ func CRUDForSearchFoods(kws string, page, limit uint64) (*[]FoodModel, error) {
 
 // CRUDForSearchRestaurants 用于resta 数据库查询
 func CRUDForSearchRestaurants(kws string, page, limit uint64) (*[]RestaurantModel, error) {
-	sql := "select id, name, picture_url, location from restaurant where name like " + kws + " limit " + strconv.Itoa(int((page-1)*limit)) + ", " + strconv.Itoa(int(limit))
+	sql := fmt.Sprintf("select id, name, picture_url, location from restaurant where name like %s order by hot desc limit %d,%d", kws, (page-1)*limit, limit)
 	var Restaurants []RestaurantModel
 	d := DB.Self.Raw(sql).Scan(&Restaurants)
 	if d.Error != nil {
