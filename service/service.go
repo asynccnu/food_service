@@ -69,9 +69,7 @@ func getKeyWords(st string) string {
 		//分词
 		kws = util.SegWord(st)
 	}
-	if kws != "" {
-		kws = "'%" + st + "%' or name like " + kws
-	} else {
+	if kws == "" {
 		kws = "'%" + st + "%'"
 	}
 
