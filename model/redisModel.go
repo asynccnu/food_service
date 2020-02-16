@@ -74,4 +74,3 @@ func GetHotSearch() ([]string, error) {
 	}
 	return result, nil
 }
-
