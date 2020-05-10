@@ -15,10 +15,9 @@ log:
   log_backup_count: 7
 db:  # DB 配置 部署时环境变量覆盖
   name: food_service
-  addr: rm-wz907gsr637s950hm8o.mysql.rds.aliyuncs.com
-  username: food_service
-  password: Muxistudio304
+  addr: 127.0.0.1:3306
+  username: muxi
+  password: muxi
 redis:  # redis 配置
   network: tcp
-  max_num: 8
   addr: 127.0.0.1:6379

@@ -48,7 +48,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	{
 		rest.GET("/detail/:id", restaurant.Get)
 		rest.GET("/list", restaurant.List)
-		rest.POST("/random", restaurant.Random) //get改成post
+		rest.GET("/random", restaurant.Random)
 	}
 
 	foo := g.Group("/api/v1/food")
