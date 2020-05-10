@@ -1,10 +1,13 @@
 package util
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/asynccnu/food_service/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/huichen/sego"
@@ -40,14 +43,17 @@ func GetReqID(c *gin.Context) string {
 
 //SegWord 分词
 //param            str         需要分词的文字
-func SegWord(str string) (sql string) {
+func SegWord(str interface{}) (sql string) {
 	//如果已经成功加载字典
+	var wdslice []string
 	if Segmenter.Dictionary() != nil {
-		var wdslice []string
-		wds := sego.SegmentsToSlice(Segmenter.Segment([]byte(str)), true)
-		for _, w := range wds {
+		wds := sego.SegmentsToString(Segmenter.Segment([]byte(fmt.Sprintf("%v", str))), true)
+		slice := strings.Split(wds, " ")
+		for _, wd := range slice {
+			w := strings.Split(wd, "/")[0]
 			if i, _ := strconv.Atoi(w); i == 0 && w != "0" { //如果为0，则表示非数字
 				w = "'%" + w + "%'"
+				_ = model.AddNewSearchRecord(w)
 				wdslice = append(wdslice, w)
 			}
 		}
