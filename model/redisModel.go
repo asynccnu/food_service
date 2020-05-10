@@ -2,6 +2,7 @@ package model
 
 import (
 	"github.com/garyburd/redigo/redis"
+	"github.com/spf13/viper"
 	"strconv"
 	"time"
 )
@@ -33,13 +34,15 @@ func now() string {
 func nextWeek() string {
 	now := time.Now()
 	next := time.Date(now.Year(), now.Month(), now.Day(), 23, 59, 59, 0, now.Location())
-	return string(next.AddDate(0, 0, 7).Unix())
+	result := strconv.FormatInt(next.Unix(), 10)
+	return result
 }
 
 func nextDay() string {
 	now := time.Now()
 	next := time.Date(now.Year(), now.Month(), now.Day(), 23, 59, 59, 0, now.Location())
-	return string(next.AddDate(0, 0, 1).Unix())
+	result := strconv.FormatInt(next.Unix(), 10)
+	return result
 }
 
 func pastTime(day int) string {
@@ -61,7 +64,7 @@ func GetHotSearch() ([]string, error) {
 		return []string{}, err
 	}
 
-	result, err := redis.Strings(RedisDb.Self.Do("zrevrange", now()+"hot", 0, 6))
+	result, err := redis.Strings(RedisDb.Self.Do("zrevrange", now()+"hot", 0, viper.GetInt("redis.max_num")-1))
 	if err != nil {
 		return []string{}, err
 	}
