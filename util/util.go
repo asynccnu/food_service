@@ -4,7 +4,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/huichen/sego"
@@ -40,18 +39,19 @@ func GetReqID(c *gin.Context) string {
 
 //SegWord 分词
 //param            str         需要分词的文字
-func SegWord(str string) (sql string) {
+func SegWord(str string) []string {
+	var wdslice []string
 	//如果已经成功加载字典
 	if Segmenter.Dictionary() != nil {
-		var wdslice []string
 		wds := sego.SegmentsToSlice(Segmenter.Segment([]byte(str)), true)
 		for _, w := range wds {
 			if i, _ := strconv.Atoi(w); i == 0 && w != "0" { //如果为0，则表示非数字
-				w = "'%" + w + "%'"
+				//w = "'%" + w + "%'"
 				wdslice = append(wdslice, w)
 			}
 		}
-		sql = strings.Join(wdslice, " or name like ")
+		//sql = strings.Join(wdslice, " or name like ")
 	}
-	return
+
+	return wdslice
 }

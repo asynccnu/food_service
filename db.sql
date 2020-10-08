@@ -31,7 +31,8 @@ CREATE TABLE `restaurant` (
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
   KEY `location` (`location`),
-  KEY `hot` (`hot`)
+  KEY `hot` (`hot`),
+  FULLTEXT KEY `name_fulltext`(`name`) WITH PARSER ngram
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8MB4;
 
 
@@ -52,7 +53,8 @@ CREATE TABLE `food` (
   KEY `name` (`name`),
   KEY `restaurant_id` (`restaurant_id`),
   KEY `is_special` (`is_special`),
-  KEY `hot` (`hot`)
+  KEY `hot` (`hot`),
+  FULLTEXT KEY `name_fulltext`(`name`) WITH PARSER ngram
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8MB4;
 
 

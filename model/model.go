@@ -183,7 +183,9 @@ func GetMenusByRestaurantID(id uint32) (*[]Menu, error) {
 
 // CRUDForSearchFoods 用于foods数据库查询
 func CRUDForSearchFoods(kws string, page, limit uint64) (*[]FoodModel, error) {
-	sql := fmt.Sprintf("select restaurant_id, name from food where name like %s order by hot desc limit %d,%d", kws, (page-1)*limit, limit)
+	//sql := fmt.Sprintf("select restaurant_id, name from food where name like %s order by hot desc limit %d,%d", kws, (page-1)*limit, limit)
+	// 替换为全文索引
+	sql := fmt.Sprintf("select restaurant_id, name from food where match(name) against('%s') order by hot desc limit %d,%d", kws, (page-1)*limit, limit)
 	var Foods []FoodModel
 	d := DB.Self.Raw(sql).Scan(&Foods)
 	if d.Error != nil {
@@ -192,9 +194,11 @@ func CRUDForSearchFoods(kws string, page, limit uint64) (*[]FoodModel, error) {
 	return &Foods, nil
 }
 
-// CRUDForSearchRestaurants 用于resta 数据库查询
+// CRUDForSearchRestaurants 用于restaurants数据库查询
 func CRUDForSearchRestaurants(kws string, page, limit uint64) (*[]RestaurantModel, error) {
-	sql := fmt.Sprintf("select id, name, picture_url, location from restaurant where name like %s order by hot desc limit %d,%d", kws, (page-1)*limit, limit)
+	//sql := fmt.Sprintf("select id, name, picture_url, location from restaurant where match(name) against('%s') order by hot desc limit %d,%d", kws, (page-1)*limit, limit)
+	// 替换为全文索引
+	sql := fmt.Sprintf("select id, name, picture_url, location from restaurant where match(name) against('%s') order by hot desc limit %d,%d", kws, (page-1)*limit, limit)
 	var Restaurants []RestaurantModel
 	d := DB.Self.Raw(sql).Scan(&Restaurants)
 	if d.Error != nil {

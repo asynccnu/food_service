@@ -1,10 +1,11 @@
 package model
 
 import (
-	"github.com/garyburd/redigo/redis"
-	"github.com/spf13/viper"
 	"strconv"
 	"time"
+
+	"github.com/garyburd/redigo/redis"
+	"github.com/spf13/viper"
 )
 
 func AddNewSearchRecord(name string) error {

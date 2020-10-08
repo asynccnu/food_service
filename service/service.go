@@ -60,6 +60,7 @@ type RecommendRestaurant struct {
 //----------------------------------------------------------------//
 //-----------------------------小写函数----------------------------////
 
+/*
 func getKeyWords(st string) string {
 	var kws string
 
@@ -75,15 +76,36 @@ func getKeyWords(st string) string {
 
 	return kws
 }
+*/
+
+// addSearchRecord 增加搜索记录
+func addSearchRecord(st string) error {
+	wds := util.SegWord(st)
+	wds = append(wds, st)
+	var err error
+
+	for _, v := range wds {
+		err = model.AddNewSearchRecord(v)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 //----------------------------------------------------------------//
 //-------------------------------大写函数--------------------------//
 
 // SearchForFoods 分词之后关键字用于数据库查询
 func SearchForFoods(st string, page, limit uint64) (*[]SearchFoodModel, error) {
-	kws := getKeyWords(st)
+	//kws := getKeyWords(st)
+	err := addSearchRecord(st)
+	if err != nil {
+		return nil, err
+	}
 
-	foods, err := model.CRUDForSearchFoods(kws, page, limit)
+	foods, err := model.CRUDForSearchFoods(st, page, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -107,9 +129,13 @@ func SearchForFoods(st string, page, limit uint64) (*[]SearchFoodModel, error) {
 
 // SearchForRestaurants 分词之后关键字用于数据库查询
 func SearchForRestaurants(st string, page, limit uint64) (*[]SearchRestaurantModel, error) {
-	kws := getKeyWords(st)
+	//kws := getKeyWords(st)
+	err := addSearchRecord(st)
+	if err != nil {
+		return nil, err
+	}
 
-	restaurants, err := model.CRUDForSearchRestaurants(kws, page, limit)
+	restaurants, err := model.CRUDForSearchRestaurants(st, page, limit)
 	if err != nil {
 		return nil, err
 	}
